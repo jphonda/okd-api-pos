@@ -1,0 +1,11 @@
+version = 0.1
+
+[default.deploy]
+[default.deploy.parameters]
+stack_name = "okd-pos1-stack"
+s3_bucket = "okd-pos1"
+s3_prefix = "sam-app"
+region = "ap-southeast-1"
+capabilities = "CAPABILITY_IAM"
+parameter_overrides = "MongoDbUri=mongodb+srv://jphonda:qSt0LdmSJNvVL0GE@db-okd-pos.3orxl.mongodb.net/okd-pos?retryWrites=true&w=majority JwtSecret=your-jwt-secret-key"
+confirm_changeset = true

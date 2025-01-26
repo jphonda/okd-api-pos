@@ -1,0 +1,278 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Resources:
+  # Lambda function สำหรับการ login
+  LoginFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: login.handler  # ชี้ไปที่ฟังก์ชัน login ใน src
+      CodeUri: ./src/auth
+      Runtime: nodejs20.x
+      Layers:
+        - !Ref AuthLayer  # เชื่อมต่อกับ Layer ที่เราใช้เก็บฟังก์ชันและ service ต่างๆ
+      Environment:
+        Variables:
+          MONGODB_URI: !Ref MongoDbUri  # MongoDB connection URI
+          JWT_SECRET: !Ref JwtSecret     # Secret สำหรับการสร้างและตรวจสอบ JWT
+      Events:
+        LoginApi:
+          Type: Api
+          Properties:
+            Path: /auth/login
+            Method: POST
+
+  RegisterFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: register.handler
+      CodeUri: ./src/auth
+      Runtime: nodejs20.x
+      Layers:
+        - !Ref AuthLayer
+      Environment:
+        Variables:
+          MONGODB_URI: !Ref MongoDbUri
+          JWT_SECRET: !Ref JwtSecret
+      Events:
+        RegisterApi:
+          Type: Api
+          Properties:
+            Path: /auth/register
+            Method: POST
+
+  GetProfileFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: profile.handler
+      CodeUri: ./src/auth
+      Runtime: nodejs20.x
+      Layers:
+        - !Ref AuthLayer
+      Environment:
+        Variables:
+          MONGODB_URI: !Ref MongoDbUri
+          JWT_SECRET: !Ref JwtSecret
+      Events:
+        GetProfileApi:
+          Type: Api
+          Properties:
+            Path: /auth/profile
+            Method: GET
+
+  ProductCreateFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: create.handler
+      CodeUri: ./src/products
+      Runtime: nodejs20.x
+      Layers:
+        - !Ref AuthLayer
+      Environment:
+        Variables:
+          MONGODB_URI: !Ref MongoDbUri
+          JWT_SECRET: !Ref JwtSecret
+      Events:
+        ProductCreateApi:
+          Type: Api
+          Properties:
+            Path: /product
+            Method: POST
+
+  ProductListFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: list.handler
+      CodeUri: ./src/products
+      Runtime: nodejs20.x
+      Layers:
+        - !Ref AuthLayer
+      Environment:
+        Variables:
+          MONGODB_URI: !Ref MongoDbUri
+          JWT_SECRET: !Ref JwtSecret
+      Events:
+        ProductListApi:
+          Type: Api
+          Properties:
+            Path: /product
+            Method: GET
+
+  OrderCreateFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: create.handler
+      CodeUri: ./src/orders
+      Runtime: nodejs20.x
+      Layers:
+        - !Ref AuthLayer
+      Environment:
+        Variables:
+          MONGODB_URI: !Ref MongoDbUri
+          JWT_SECRET: !Ref JwtSecret
+      Events:
+        OrderCreateApi:
+          Type: Api
+          Properties:
+            Path: /order
+            Method: POST
+
+  CookingUpdateOrderFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: updateOrders.handler
+      CodeUri: ./src/cooking
+      Runtime: nodejs20.x
+      Layers:
+        - !Ref AuthLayer
+      Environment:
+        Variables:
+          MONGODB_URI: !Ref MongoDbUri
+          JWT_SECRET: !Ref JwtSecret
+      Events:
+        CookingUpdateOrderApi:
+          Type: Api
+          Properties:
+            Path: /cooking/{id}
+            Method: PUT
+
+  CategoriesCreateFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: create.handler
+      CodeUri: ./src/categories
+      Runtime: nodejs20.x
+      Layers:
+        - !Ref AuthLayer
+      Environment:
+        Variables:
+          MONGODB_URI: !Ref MongoDbUri
+          JWT_SECRET: !Ref JwtSecret
+      Events:
+        CategoryCreateApi:
+          Type: Api
+          Properties:
+            Path: /categories
+            Method: POST
+
+  CreateProductStockFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: create.handler
+      CodeUri: ./src/products/stocks
+      Runtime: nodejs20.x
+      Layers:
+        - !Ref AuthLayer
+      Environment:
+        Variables:
+          MONGODB_URI: !Ref MongoDbUri
+          JWT_SECRET: !Ref JwtSecret
+      Events:
+        CreateProductStockApi:
+          Type: Api
+          Properties:
+            Path: /productStock
+            Method: POST
+
+  ListProductStockFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: list.handler
+      CodeUri: ./src/products/stocks
+      Runtime: nodejs20.x
+      Layers:
+        - !Ref AuthLayer
+      Environment:
+        Variables:
+          MONGODB_URI: !Ref MongoDbUri
+          JWT_SECRET: !Ref JwtSecret
+      Events:
+        ListProductStockApi:
+          Type: Api
+          Properties:
+            Path: /productStock
+            Method: GET
+
+  UpdateProductStockFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: update.handler
+      CodeUri: ./src/products/stocks
+      Runtime: nodejs20.x
+      Layers:
+        - !Ref AuthLayer
+      Environment:
+        Variables:
+          MONGODB_URI: !Ref MongoDbUri
+          JWT_SECRET: !Ref JwtSecret
+      Events:
+        DeductProductStockApi:
+          Type: Api
+          Properties:
+            Path: /productStock/update
+            Method: POST
+
+  CreateRecipesFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: create.handler
+      CodeUri: ./src/recipes
+      Runtime: nodejs20.x
+      Layers:
+        - !Ref AuthLayer
+      Environment:
+        Variables:
+          MONGODB_URI: !Ref MongoDbUri
+          JWT_SECRET: !Ref JwtSecret
+      Events:
+        CreateProductRecipesApi:
+          Type: Api
+          Properties:
+            Path: /productRecipes
+            Method: POST
+
+  CreateWarehouseFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: create.handler
+      CodeUri: ./src/warehouse
+      Runtime: nodejs20.x
+      Layers:
+        - !Ref AuthLayer
+      Environment:
+        Variables:
+          MONGODB_URI: !Ref MongoDbUri
+          JWT_SECRET: !Ref JwtSecret
+      Events:
+        CreateWarehouseApi:
+          Type: Api
+          Properties:
+            Path: /warehouse
+            Method: POST
+
+  # Define Layer สำหรับฟังก์ชัน auth ทั้งหมด
+  AuthLayer:
+    Type: AWS::Serverless::LayerVersion
+    Properties:
+      LayerName: "AuthLayer"
+      Description: "Layer containing shared authentication logic"
+      ContentUri: layer/nodejs  # ชี้ไปที่โฟลเดอร์ layer/nodejs ที่เราเก็บฟังก์ชัน auth
+      CompatibleRuntimes:
+        - nodejs14.x
+
+Parameters:
+  MongoDbUri:
+    Type: String
+    Description: The MongoDB connection string for the database
+
+  JwtSecret:
+    Type: String
+    Description: The secret key for signing and verifying JWT tokens
+
+Outputs:
+  LoginApiUrl:
+    Description: "API Gateway endpoint URL for Login"
+    Value: !Sub "https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/auth/login"
+
+  VerifyTokenApiUrl:
+    Description: "API Gateway endpoint URL for Token Verification"
+    Value: !Sub "https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/auth/verify"
