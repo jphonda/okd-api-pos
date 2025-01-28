@@ -9,6 +9,7 @@ exports.handler = async (event) => {
         if (!token) {
             throw new Error('Token not provided');
         }
+
         // กำหนดข้อมูล payload
         payload.profile = await verifyAndCheckToken(token);
         if (payload.profile.role !== 'admin') {
@@ -26,7 +27,7 @@ exports.handler = async (event) => {
 
     } catch (error) {
         console.error('Error getting profile:', error);
-        return {
+        return  {
             statusCode: 401,  // Unauthorized
             body: JSON.stringify({
                 message: 'Could not authenticate user',

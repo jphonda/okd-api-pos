@@ -9,8 +9,7 @@ const authorizeUserProfile = async (authorizationToken) => {
 	const profile = await tokenVerifier.getProfile(authorizationToken);
 	if (!profile.role.includes(ADMIN_ROLE)) {
 		throw new Error('Unauthorized');
-	}
-	return profile;
+  }
 };
 
 exports.handler = async (event) => {
