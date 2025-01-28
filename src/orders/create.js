@@ -9,7 +9,7 @@ exports.handler = async (event) => {
         if (!token) {
             throw new Error('Token not provided');
         }
-
+        // ทดสอบ merge
         // กำหนดข้อมูล payload
         payload.profile = await verifyAndCheckToken(token);
         if (payload.profile.role !== 'admin') {
