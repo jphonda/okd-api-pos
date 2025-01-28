@@ -19,6 +19,10 @@ exports.handler = async (event) => {
 		requestPayload.profile = await authorizeUserProfile(authorizationToken);
 		requestPayload.body = JSON.parse(event.body);
 		const categories = await categoriesCreator.create(requestPayload);
+    
+    console.log('Categories created:', categories);
+
+     
 		return {
 			statusCode: 201,
 			body: JSON.stringify(categories)
@@ -29,7 +33,6 @@ exports.handler = async (event) => {
 			statusCode: 401,  // Unauthorized
 			body: JSON.stringify({
 				message: 'Could not authenticate user', error: authError.message
-			})
-		};
+			}) };
 	}
 }
