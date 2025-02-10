@@ -2,12 +2,12 @@ const connectToDatabase = require('/opt/services/mongodb');
 const ProductStocks = require('/opt/models/product_stocks');
 
 const productStockCreator = {
-	createProductStocks: async (profile, payload) => {
+	create: async (profile, payload) => {
 		try {
 			await connectToDatabase();
 			const productStocks = new ProductStocks();
 			productStocks.prefix = profile.prefix;
-			productStocks.warehouse_id = payload.warehouse_id;
+			productStocks.warehouse_id = payload.warehouse_id || "";
 			productStocks.product_id = payload.product_id;
 			productStocks.quantity = payload.quantity || 0;
 			productStocks.receivedDate = payload.receivedDate || 0;

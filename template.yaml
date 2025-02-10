@@ -192,6 +192,26 @@ Resources:
             Path: /productStock
             Method: GET
 
+  UpdateStockQuantityFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: updateStock.handler
+      CodeUri: ./src/products
+      Runtime: nodejs20.x
+      Layers:
+        - !Ref AuthLayer
+      Environment:
+        Variables:
+          MONGODB_URI: !Ref MongoDbUri
+          JWT_SECRET: !Ref JwtSecret
+      Events:
+        UpdateStockQuantityApi:
+          Type: Api
+          Properties:
+            Path: /productStock/{id}
+            Method: PUT
+
+
   UpdateProductStockFunction:
     Type: AWS::Serverless::Function
     Properties:
