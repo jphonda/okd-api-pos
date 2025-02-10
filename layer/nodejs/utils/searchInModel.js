@@ -1,5 +1,4 @@
 const connectToDatabase = require('/opt/services/mongodb');
-const Stock = require('/opt/models/stock');
 const {ObjectId} = require('mongodb');
 
 module.exports.searchInModelWithStock = async function searchInModelWithStock(Model, prefix, query) {
@@ -31,17 +30,6 @@ module.exports.searchInModelWithStock = async function searchInModelWithStock(Mo
         } else {
             results = await Model.find(searchQuery);
         }
-
-        // // ดึงข้อมูล Stock ที่สัมพันธ์กันกับแต่ละ Item
-        // await Promise.all(results.map(async (item) => {
-        //     const stock = await Stock.findOne({item_id: item._id});
-        //     return {
-        //         ...item.toObject(),  // แปลงข้อมูล Item ให้เป็น object
-        //         stock: stock ? stock.stock : 0, // ถ้ามี stock คงเหลือให้แสดง ถ้าไม่มีให้เป็น 0
-        //         volume: stock ? stock.volume : 0
-        //     };
-        // }));
-
         return results;
 
 
